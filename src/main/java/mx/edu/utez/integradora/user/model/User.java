@@ -37,7 +37,9 @@ public class User {
     private boolean status;
 
     @ManyToOne
+    @JoinColumn(name = "role_id", columnDefinition = "BIGINT DEFAULT 2")
     private Role role;
+
 
     public User(String name, String lastname, String email, String password, String phone, boolean status) {
         this.name = name;
