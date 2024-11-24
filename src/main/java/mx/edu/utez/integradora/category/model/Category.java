@@ -12,6 +12,8 @@ public class Category {
     private String name;
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+    @Column(name = "status", columnDefinition = "BOOL DEFAULT TRUE")
+    private boolean status;
 
     public Category() {
     }
@@ -19,6 +21,12 @@ public class Category {
     public Category(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public Category(String name, String description, boolean status) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
     }
 
     public Long getId() {
@@ -43,5 +51,13 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }
