@@ -9,8 +9,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/category")
-@CrossOrigin(origins = {"*"}, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@RequestMapping("/api/category")
+@CrossOrigin(origins = { "*" }, methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+        RequestMethod.DELETE })
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -24,22 +25,26 @@ public class CategoryController {
     }
 
     @GetMapping("/active")
-    public ResponseEntity<Object> findAllEnabled(){
+    public ResponseEntity<Object> findAllEnabled() {
         return categoryService.findAllActive();
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@Validated({CategoryDto.Register.class}) @RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<Object> save(
+            @Validated({ CategoryDto.Register.class }) @RequestBody CategoryDto categoryDto) {
         return categoryService.save(categoryDto);
     }
 
     @PutMapping
-    public ResponseEntity<Object> update(@Validated({CategoryDto.Modify.class}) @RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<Object> update(
+            @Validated({ CategoryDto.Modify.class }) @RequestBody CategoryDto categoryDto) {
         return categoryService.update(categoryDto);
     }
 
-    @PutMapping
-    public ResponseEntity<Object> changeStatus(@Validated({CategoryDto.Modify.class}) @RequestBody CategoryDto categoryDto) {
-        return categoryService.changeStatus(categoryDto);
-    }
+    // @PutMapping
+    // public ResponseEntity<Object>
+    // changeStatus(@Validated({CategoryDto.Modify.class}) @RequestBody CategoryDto
+    // categoryDto) {
+    // return categoryService.changeStatus(categoryDto);
+    // }
 }
