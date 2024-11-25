@@ -27,7 +27,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/register", "/api/auth/login", "/api/user/all", "/api/category/all")
-                        .permitAll().requestMatchers("/api/category/save, /api/category/update")
+                        .permitAll().requestMatchers("/api/category/save","/api/category/update", "/api/category/change-status")
                         .hasAnyAuthority("Admin")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
