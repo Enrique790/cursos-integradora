@@ -30,8 +30,71 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findAll(){
-        return new ResponseEntity<>(new ResponseObject(repository.findAll(), Type.SUCCESS, "Listado de categorias activas"), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseObject(repository.findAll(), Type.SUCCESS, "Listado de categorias"), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> findAllActive(){
+        return new ResponseEntity<>(new ResponseObject(repository.findAllByStatusOrderByName(true), Type.SUCCESS, "Listado de categorias activas"), HttpStatus.OK);
+    }
+
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<Object> save(CategoryDto dto) {
+        dto.setName(dto.getName().toLowerCase());
+        if(dto.getName().length() < 3) {
+            return new ResponseEntity<>(new ResponseObject("El nombre de la categoria debe de tener mas de 3 caracteres",Type.WARN), HttpStatus.BAD_REQUEST);
+        }
+        Optional<Category> optionalCategory = repository.searchByNameAndId(dto.getName(), 0L);
+        if(optionalCategory.isPresent()) {
+            return new ResponseEntity<>(new ResponseObject("El nombre de la categoria ya existe", Type.WARN), HttpStatus.BAD_REQUEST);
+        }
+        Category category = new Category(dto.getName(), dto.getDescription(), true);
+        category = repository.saveAndFlush(category);
+        if (category == null) {
+            log.error("Error al guardar la categoria");
+            return new ResponseEntity<>(new ResponseObject("Error al guardar la categoria", Type.ERROR), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(new ResponseObject("Se registro la categoria con exito", Type.SUCCESS), HttpStatus.OK);
+    }
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<Object> update(CategoryDto dto) {
+        dto.setName(dto.getName().toLowerCase());
+        if(dto.getName().length() < 3) {
+            return new ResponseEntity<>(new ResponseObject("El nombre de la categoria debe de tener as de 3 caracteres",Type.WARN), HttpStatus.BAD_REQUEST);
+        }
+        Optional<Category> optional = repository.findById(dto.getId());
+        if(!optional.isPresent()) {
+            return new ResponseEntity<>(new ResponseObject("No se encontro esta categoria", Type.WARN), HttpStatus.NOT_FOUND);
+        }
+        Optional<Category> optionalCategory = repository.searchByNameAndId(dto.getName(), dto.getId());
+        if(optionalCategory.isPresent()) {
+            return new ResponseEntity<>(new ResponseObject("El nombre de la categoria ya existe", Type.WARN), HttpStatus.BAD_REQUEST);
+        }
+        Category category = optional.get();
+        category.setName(dto.getName());
+        category = repository.saveAndFlush(category);
+        if (category == null) {
+            log.error("No se puedo actualizar la categoria");
+            return new ResponseEntity<>(new ResponseObject("Error al actualizar la categoria", Type.ERROR), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(new ResponseObject("Se actualizar la categoria con exito", Type.SUCCESS), HttpStatus.OK);
     }
 
 
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<Object> changeStatus(CategoryDto dto) {
+        Optional<Category> optionalCategory = repository.findById(dto.getId());
+        if(!optionalCategory.isPresent()) {
+            return new ResponseEntity<>(new ResponseObject("No se encontro esta categoria", Type.WARN), HttpStatus.NOT_FOUND);
+        }
+        Category category = optionalCategory.get();
+        category.setStatus(!category.isStatus());
+        category = repository.saveAndFlush(category);
+        if (category == null) {
+            log.error("No se pudo cambiar el estado de la categoria");
+            return new ResponseEntity<>(new ResponseObject("Error al cambiar el estado de la categoria", Type.ERROR), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(new ResponseObject("Se cambio el estado de la categoria con exito", Type.SUCCESS), HttpStatus.OK);
+    }
 }
