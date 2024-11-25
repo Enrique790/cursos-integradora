@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Logs file  ###
+servicio_text.log
+servicio_test.log.2024-11-20.0.gz
+servicio_test.log.2024-11-21.0.gz
