@@ -17,22 +17,26 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    // Crear o actualizar un curso usando CourseDto
     @PostMapping
     public ResponseEntity<Course> guardarCurso(@RequestBody CourseDto courseDto) {
         Course cursoGuardado = courseService.guardarCurso(courseDto);
         return ResponseEntity.ok(cursoGuardado);
     }
 
+    // Obtener todos los cursos
     @GetMapping
     public ResponseEntity<List<Course>> obtenerCursos() {
         return ResponseEntity.ok(courseService.obtenerCursos());
     }
 
+    // Obtener curso por ID
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Course>> obtenerCursoPorId(@PathVariable int id) {
         return ResponseEntity.ok(courseService.obtenerCursoPorId(id));
     }
 
+    // Deshabilitar un curso
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deshabilitarCurso(@PathVariable int id) {
         boolean exito = courseService.deshabilitarCurso(id);
@@ -41,10 +45,5 @@ public class CourseController {
         } else {
             return ResponseEntity.badRequest().body("No se encontró ningún curso con el id: " + id);
         }
-    }
-
-    @GetMapping("/activos")
-    public ResponseEntity<List<Course>> obtenerCursosActivos() {
-        return ResponseEntity.ok(courseService.obtenerCursosActivos());
     }
 }
