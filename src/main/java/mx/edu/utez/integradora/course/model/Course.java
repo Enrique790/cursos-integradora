@@ -10,13 +10,13 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
-    private String nombre;
+    @Column(nullable = false, columnDefinition = "VARCHAR(50)")
+    private String name;
 
-    @Column(nullable = false)
-    private String duracion;
+    @Column(nullable = false, columnDefinition = "VARCHAR(10)")
+    private String duration;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String temario;
 
     @Column(columnDefinition = "TEXT")
@@ -25,28 +25,76 @@ public class Course {
     @Column(name = "id_categoria", nullable = false)
     private int idCategoria;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TINYINT DEFAULT 1")
     private boolean status;
 
-    // Se colocan los Getters y setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public Course() {
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public Course(String name, String duration, String temario, String descripcion, int idCategoria, boolean status) {
+        this.name = name;
+        this.duration = duration;
+        this.temario = temario;
+        this.descripcion = descripcion;
+        this.idCategoria = idCategoria;
+        this.status = status;
 
-    public String getDuracion() { return duracion; }
-    public void setDuracion(String duracion) { this.duracion = duracion; }
+    }
 
-    public String getTemario() { return temario; }
-    public void setTemario(String temario) { this.temario = temario; }
+    public int getId() {
+        return id;
+    }
 
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public int getIdCategoria() { return idCategoria; }
-    public void setIdCategoria(int idCategoria) { this.idCategoria = idCategoria; }
+    public String getName() {
+        return name;
+    }
 
-    public boolean isStatus() { return status; }
-    public void setStatus(boolean status) { this.status = status; }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getTemario() {
+        return temario;
+    }
+
+    public void setTemario(String temario) {
+        this.temario = temario;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
 }
