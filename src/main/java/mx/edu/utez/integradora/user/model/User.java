@@ -19,10 +19,8 @@ public class User {
     @Column(name = "name", nullable = false, length = 50, columnDefinition = "VARCHAR(50)")
     private String name;
 
-
-    @Column(name = "lastname", nullable = true , columnDefinition = "VARCHAR(40)")
+    @Column(name = "lastname", nullable = true, columnDefinition = "VARCHAR(40)")
     private String lastname;
-
 
     @Column(name = "email", nullable = false, unique = true, length = 50, columnDefinition = "VARCHAR(50)")
     private String email;
@@ -39,7 +37,6 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "role_id", columnDefinition = "BIGINT DEFAULT 2")
     private Role role = new Role(2);
-
 
     public User(String name, String lastname, String email, String password, String phone, boolean status) {
         this.name = name;
@@ -71,6 +68,14 @@ public class User {
         this.email = email;
         this.password = password;
         this.phone = phone;
+    }
+
+    public User(String name, String email, String password, String phone, Role role) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.role = role;
     }
 
     public User() {

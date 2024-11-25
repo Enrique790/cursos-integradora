@@ -20,6 +20,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    @GetMapping("/all")
     public ResponseEntity<Object> findAll() {
         return categoryService.findAll();
     }
@@ -29,13 +30,13 @@ public class CategoryController {
         return categoryService.findAllActive();
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public ResponseEntity<Object> save(
             @Validated({ CategoryDto.Register.class }) @RequestBody CategoryDto categoryDto) {
         return categoryService.save(categoryDto);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<Object> update(
             @Validated({ CategoryDto.Modify.class }) @RequestBody CategoryDto categoryDto) {
         return categoryService.update(categoryDto);

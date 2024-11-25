@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController()
 @RequestMapping("/api/user")
-@CrossOrigin(origins = {"*"},methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
+@CrossOrigin(origins = { "*" }, methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+        RequestMethod.DELETE })
 public class UserController {
     private UserService userService;
-
 
     @Autowired
     public UserController(UserService userService) {
@@ -20,8 +20,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Object> findAll(){
+    public ResponseEntity<Object> findAll() {
         return userService.getAll();
     }
-
 }
