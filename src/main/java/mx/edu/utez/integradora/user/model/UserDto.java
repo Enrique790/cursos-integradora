@@ -11,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
      @NotBlank(groups = {Modify.class,Create.class}, message = "Es necesario el nombre")
      private String name;
 
-     @NotBlank(groups = {Modify.class, Create.class}, message = "NO PUEDE ESTAR EN BLANCO SI QUIERES TENER APELLIDO")
      private String lastname;
 
      @Email(groups = {Modify.class,Create.class}, message = "Tiene que se un correo valido")
@@ -71,7 +70,7 @@ import org.springframework.validation.annotation.Validated;
          return lastname;
      }
 
-     public void setLastname(@NotBlank(groups = {Modify.class, Create.class}, message = "NO PUEDE ESTAR EN BLANCO SI QUIERES TENER APELLIDO") String lastname) {
+     public void setLastname(String lastname) {
          this.lastname = lastname;
      }
 

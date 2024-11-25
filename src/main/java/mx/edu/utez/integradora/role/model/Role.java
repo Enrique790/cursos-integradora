@@ -19,4 +19,33 @@ public class Role {
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<User> users;}
+    private List<User> users;
+
+    public Role(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Role(long id) {
+        this.id = id;
+    }
+
+    public Role() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}

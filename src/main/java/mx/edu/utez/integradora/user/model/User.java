@@ -33,12 +33,12 @@ public class User {
     @Column(name = "phone", unique = true, length = 10, columnDefinition = "VARCHAR(10)")
     private String phone;
 
-    @Column(name = "status", columnDefinition = "BOOL DEFAULT TRUE")
+    @Column(name = "status", columnDefinition = "TINYINT DEFAULT 1")
     private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "role_id", columnDefinition = "BIGINT DEFAULT 2")
-    private Role role;
+    private Role role = new Role(2);
 
 
     public User(String name, String lastname, String email, String password, String phone, boolean status) {
@@ -48,6 +48,29 @@ public class User {
         this.password = password;
         this.phone = phone;
         this.status = status;
+    }
+
+    public User(String name, String lastname, String email, String password, String phone) {
+        this.name = name;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+    }
+
+    public User(String name, String email, String password, String phone, boolean status) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.status = status;
+    }
+
+    public User(String name, String email, String password, String phone) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
     }
 
     public User() {
