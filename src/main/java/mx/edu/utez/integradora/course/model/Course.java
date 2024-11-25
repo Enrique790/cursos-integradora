@@ -3,7 +3,7 @@ package mx.edu.utez.integradora.course.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "cursos")
+@Table(name = "course")
 public class Course {
 
     @Id
@@ -28,25 +28,60 @@ public class Course {
     @Column(nullable = false)
     private boolean status;
 
-    // Se colocan los Getters y setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // Getters y setters
+    public int getId() {
+        return id;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getDuracion() { return duracion; }
-    public void setDuracion(String duracion) { this.duracion = duracion; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public String getTemario() { return temario; }
-    public void setTemario(String temario) { this.temario = temario; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public String getDuracion() {
+        return duracion;
+    }
 
-    public int getIdCategoria() { return idCategoria; }
-    public void setIdCategoria(int idCategoria) { this.idCategoria = idCategoria; }
+    public void setDuracion(String duracion) {
+        this.duracion = duracion;
+    }
 
-    public boolean isStatus() { return status; }
-    public void setStatus(boolean status) { this.status = status; }
+    public String getTemario() {
+        return temario;
+    }
+
+    public void setTemario(String temario) {
+        this.temario = temario;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 }

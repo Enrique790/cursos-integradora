@@ -8,8 +8,6 @@ public class CourseDto {
     private int idCategoria;
     private boolean status;
 
-    public CourseDto() {}
-
     // Constructor
     public CourseDto(String nombre, String duracion, String temario, String descripcion, int idCategoria, boolean status) {
         this.nombre = nombre;
@@ -20,8 +18,7 @@ public class CourseDto {
         this.status = status;
     }
 
-    // Getters y Setters
-
+    // Getters y setters
     public String getNombre() {
         return nombre;
     }

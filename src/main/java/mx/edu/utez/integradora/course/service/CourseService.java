@@ -1,7 +1,8 @@
 package mx.edu.utez.integradora.course.service;
 
-import com.example.demo.model.Curso;
-import com.example.demo.repository.CursoRepository;
+import mx.edu.utez.integradora.course.model.Course;
+import mx.edu.utez.integradora.course.model.CourseDto;
+import mx.edu.utez.integradora.course.model.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,32 +13,56 @@ import java.util.Optional;
 public class CourseService {
 
     @Autowired
-    private CursoRepository cursoRepository;
+    private CourseRepository courseRepository;
 
-    // Para crear o actualizar un curso
-    public Curso guardarCurso(Curso curso) {
-        return cursoRepository.save(curso);
+    public Course guardarCurso(CourseDto courseDto) {
+        Course course = new Course();
+        course.setNombre(courseDto.getNombre());
+        course.setDuracion(courseDto.getDuracion());
+        course.setTemario(courseDto.getTemario());
+        course.setDescripcion(courseDto.getDescripcion());
+        course.setIdCategoria(courseDto.getIdCategoria());
+        course.setStatus(courseDto.isStatus());
+
+        return courseRepository.save(course);
     }
 
-    // Para obtener todos los datos del curso
-    public List<Curso> obtenerCursos() {
-        return cursoRepository.findAll();
-    }
-
-    // Para poder obtener un curso por medio de su id
-    public Optional<Curso> obtenerCursoPorId(int id) {
-        return cursoRepository.findById(id);
-    }
-
-    // Para hacer una eliminacion logica de un curso (Desabilitarlo)
-    public boolean deshabilitarCurso(int id) {
-        Optional<Curso> cursoOpt = cursoRepository.findById(id);
+    public Course actualizarCurso(int id, CourseDto courseDto) {
+        Optional<Course> cursoOpt = courseRepository.findById(id);
         if (cursoOpt.isPresent()) {
-            Curso curso = cursoOpt.get();
-            curso.setStatus(false);
-            cursoRepository.save(curso);
+            Course course = cursoOpt.get();
+            course.setNombre(courseDto.getNombre());
+            course.setDuracion(courseDto.getDuracion());
+            course.setTemario(courseDto.getTemario());
+            course.setDescripcion(courseDto.getDescripcion());
+            course.setIdCategoria(courseDto.getIdCategoria());
+            course.setStatus(courseDto.isStatus());
+            return courseRepository.save(course);
+        }
+        return null;
+    }
+
+
+    public List<Course> obtenerCursos() {
+        return courseRepository.findAll();
+    }
+
+    public Optional<Course> obtenerCursoPorId(int id) {
+        return courseRepository.findById(id);
+    }
+
+    public boolean deshabilitarCurso(int id) {
+        Optional<Course> cursoOpt = courseRepository.findById(id);
+        if (cursoOpt.isPresent()) {
+            Course course = cursoOpt.get();
+            course.setStatus(false);
+            courseRepository.save(course);
             return true;
         }
         return false;
+    }
+
+    public List<Course> obtenerCursosActivos() {
+        return courseRepository.findByStatusTrue();
     }
 }
