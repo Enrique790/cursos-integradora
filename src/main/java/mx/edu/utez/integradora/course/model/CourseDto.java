@@ -1,42 +1,24 @@
 package mx.edu.utez.integradora.course.model;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "course")
-public class Course {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(nullable = false)
+public class CourseDto {
     private String nombre;
-
-    @Column(nullable = false)
     private String duracion;
-
-    @Column(nullable = false)
     private String temario;
-
-    @Column(columnDefinition = "TEXT")
     private String descripcion;
-
-    @Column(name = "id_categoria", nullable = false)
     private int idCategoria;
-
-    @Column(nullable = false)
     private boolean status;
 
+    // Constructor
+    public CourseDto(String nombre, String duracion, String temario, String descripcion, int idCategoria, boolean status) {
+        this.nombre = nombre;
+        this.duracion = duracion;
+        this.temario = temario;
+        this.descripcion = descripcion;
+        this.idCategoria = idCategoria;
+        this.status = status;
+    }
+
     // Getters y setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getNombre() {
         return nombre;
     }
