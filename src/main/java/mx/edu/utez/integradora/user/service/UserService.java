@@ -6,7 +6,6 @@ import mx.edu.utez.integradora.user.model.UserRepository;
 import mx.edu.utez.integradora.utils.ResponseObject;
 import mx.edu.utez.integradora.utils.Type;
 
-import org.hibernate.annotations.processing.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -111,6 +109,6 @@ public class UserService {
         updateUser = userRepository.saveAndFlush(updateUser);
         log.info("User update without lastname");
 
-        return new ResponseEntity<>(new ResponseObject("Se actualizo el usuario", Type.SUCCESS),HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseObject("Se actualizo el usuario", Type.SUCCESS), HttpStatus.OK);
     }
 }

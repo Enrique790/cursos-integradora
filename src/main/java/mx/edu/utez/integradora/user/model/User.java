@@ -1,9 +1,12 @@
 package mx.edu.utez.integradora.user.model;
 
 import jakarta.persistence.*;
+import mx.edu.utez.integradora.courseUser.model.CourseUser;
 import mx.edu.utez.integradora.role.model.Role;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user", indexes = {
@@ -37,6 +40,10 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "role_id", columnDefinition = "BIGINT DEFAULT 2")
     private Role role = new Role(2);
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<CourseUser> courseUser;
 
     public User(String name, String lastname, String email, String password, String phone, boolean status) {
         this.name = name;
@@ -144,4 +151,13 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public List<CourseUser> getCourseUser() {
+        return courseUser;
+    }
+
+    public void setCourseUser(List<CourseUser> courseUser) {
+        this.courseUser = courseUser;
+    }
+
 }
