@@ -23,4 +23,14 @@ public class UserController {
     public ResponseEntity<Object> findAll() {
         return userService.getAll();
     }
+
+    @PatchMapping("/change")
+    public ResponseEntity<ResponseObject> changeStatus(@RequestBody UserDto userChangeStatus) {
+        return userService.changeStatus(userChangeStatus);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ResponseObject> updateProfile(@RequestBody UserDto userUpdateProfile) {
+        return userService.updateUser(userUpdateProfile);
+    }
 }
