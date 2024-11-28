@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class CategoryDto {
-    @NotNull(groups = {Modify.class}, message = "Es necesario un id")
+    @NotNull(groups = {Modify.class, ChangeStatus.class, Delete.class}, message = "Es necesario un id")
     private long id;
 
     @NotBlank(groups = {Register.class, Modify.class}, message = "Es necesario un nombre")
@@ -16,7 +16,7 @@ public class CategoryDto {
     public CategoryDto() {
     }
 
-    @NotNull(groups = {Modify.class}, message = "Es necesario un id")
+    @NotNull(groups = {Modify.class, ChangeStatus.class, Delete.class}, message = "Es necesario un id")
     public long getId() {
         return id;
     }
@@ -48,5 +48,8 @@ public class CategoryDto {
     }
 
     public interface ChangeStatus {
+    }
+
+    public interface Delete {
     }
 }

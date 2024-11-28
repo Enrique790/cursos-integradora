@@ -47,4 +47,9 @@ public class CategoryController {
      changeStatus(@Validated({CategoryDto.ChangeStatus.class}) @RequestBody CategoryDto categoryDto) {
      return categoryService.changeStatus(categoryDto);
      }
+
+     @DeleteMapping("/delete/{id}")
+     public ResponseEntity<Object> delete(@PathVariable Long id) {
+        return categoryService.delete(id);
+     }
 }
