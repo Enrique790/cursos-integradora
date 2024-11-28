@@ -7,6 +7,7 @@ import mx.edu.utez.integradora.security.dto.AuthRequest;
 import mx.edu.utez.integradora.user.model.User;
 import mx.edu.utez.integradora.user.model.UserDto;
 import mx.edu.utez.integradora.user.model.UserRepository;
+import mx.edu.utez.integradora.utils.EmailSender;
 import mx.edu.utez.integradora.utils.ResponseObject;
 import mx.edu.utez.integradora.utils.Type;
 
@@ -31,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @Transactional
@@ -46,13 +48,16 @@ public class AuthService {
 
     private UserRepository userRepository;
 
+    private EmailSender emailSender;
+
     @Autowired
     public AuthService(AuthenticationManager authenticationManager, JwtUtil jwtUtil,
-            UserDetailsServiceImpl userDetailsService, UserRepository userRepository) {
+            UserDetailsServiceImpl userDetailsService, UserRepository userRepository, EmailSender sender) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
         this.userRepository = userRepository;
+        this.emailSender = sender;
     }
 
     @Transactional(rollbackFor = { SQLException.class })
@@ -150,6 +155,105 @@ public class AuthService {
         return new ResponseEntity<>(
                 new ResponseObject(newUser, Type.SUCCESS, "Se creo exitosamente el usuario, sin apellido"),
                 HttpStatus.CREATED);
+
+    }
+
+    @Transactional(rollbackFor = { SQLException.class })
+    public ResponseEntity<ResponseObject> sendEmailPassword(AuthRequest userTO) {
+
+        if (userTO.getEmail().length() < 0 || userTO.getEmail() == null) {
+            log.warn("Debe tener correo para cambiar contrasena");
+            return new ResponseEntity<>(new ResponseObject("Debe tener correo para recuperar contrasena", Type.ERROR),
+                    HttpStatus.BAD_REQUEST);
+        }
+        Optional<User> exist = userRepository.findByMail(userTO.getEmail());
+
+        if (!exist.isPresent()) {
+            log.warn("User doesn't exist");
+            return new ResponseEntity<>(new ResponseObject("El usuario no existe", Type.WARN), HttpStatus.NOT_FOUND);
+        }
+
+        Random random = new Random();
+        StringBuilder numberString = new StringBuilder();
+
+        for (int i = 0; i < 5; i++) {
+            int digit = random.nextInt(10);
+            numberString.append(digit);
+        }
+
+        User userToSendEmail = exist.get();
+
+        userToSendEmail.setCode(numberString.toString());
+
+        userToSendEmail = userRepository.saveAndFlush(userToSendEmail);
+
+        if (userToSendEmail == null) {
+            log.warn("Code not create");
+            return new ResponseEntity<>(new ResponseObject("Código no registrado", Type.ERROR), HttpStatus.BAD_REQUEST);
+        }
+        String htmlContent = "<!DOCTYPE html>\n"
+                + "<html lang=\"es\">\n"
+                + "<head>\n"
+                + "  <meta charset=\"UTF-8\">\n"
+                + "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+                + "  <title>Recuperación de Contraseña</title>\n"
+                + "  <script src=\"https://cdn.tailwindcss.com\"></script>\n"
+                + "  <style>\n"
+                + "    :root {\n"
+                + "      --bg-main: #05090B;\n"
+                + "      --primary: #00adb5;\n"
+                + "      --accent: #ac7dd2;\n"
+                + "      --text: #eeeeee;\n"
+                + "    }\n"
+                + "    body {\n"
+                + "      background-color: var(--bg-main);\n"
+                + "      color: var(--text);\n"
+                + "    }\n"
+                + "    .bg-primary {\n"
+                + "      background-color: var(--primary);\n"
+                + "    }\n"
+                + "    .bg-accent {\n"
+                + "      background-color: var(--accent);\n"
+                + "    }\n"
+                + "    .text-primary {\n"
+                + "      color: var(--primary);\n"
+                + "    }\n"
+                + "    .text-accent {\n"
+                + "      color: var(--accent);\n"
+                + "    }\n"
+                + "  </style>\n"
+                + "</head>\n"
+                + "<body class=\"p-6\">\n"
+                + "  <div class=\"max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg\">\n"
+                + "    <h1 class=\"text-2xl font-bold text-center text-primary mb-4\">Recuperación de Contraseña</h1>\n"
+                + "\n"
+                + "    <p class=\"text-lg mb-6\">Hola, <span id=\"userName\" class=\"font-semibold text-accent\">%USER_NAME%</span>,</p>\n"
+                + "\n"
+                + "    <p class=\"text-lg mb-4\">Hemos recibido una solicitud para restablecer tu contraseña. Si no fuiste tú, ignora este mensaje.</p>\n"
+                + "\n"
+                + "    <p class=\"text-lg mb-4\">Tu código de recuperación es:</p>\n"
+                + "\n"
+                + "    <div class=\"bg-accent text-white p-4 rounded-lg text-center font-semibold text-xl mb-6\">\n"
+                + "      <span id=\"recoveryCode\">%RECOVERY_CODE%</span>\n"
+                + "    </div>\n"
+                + "\n"
+                + "    <p class=\"text-lg\">Para restablecer tu contraseña, ingresa este código en la página de recuperación de contraseña de la aplicación.</p>\n"
+                + "\n"
+                + "    <p class=\"text-lg mt-6\">Si tienes alguna pregunta o necesitas asistencia, no dudes en contactarnos.</p>\n"
+                + "\n"
+                + "    <footer class=\"mt-8 text-center text-gray-600\">\n"
+                + "      <p>Gracias por usar nuestro servicio.</p>\n"
+                + "    </footer>\n"
+                + "  </div>\n"
+                + "</body>\n"
+                + "</html>";
+        String personalizedHtml = htmlContent
+                .replace("%USER_NAME%", userToSendEmail.getName())
+                .replace("%RECOVERY_CODE%", userToSendEmail.getCode());
+
+        emailSender.sendEmail(userToSendEmail.getEmail(), "Recuperacion de contrasena", personalizedHtml);
+
+        return new ResponseEntity<>(new ResponseObject("Correo enviado", Type.SUCCESS), HttpStatus.OK);
 
     }
 }

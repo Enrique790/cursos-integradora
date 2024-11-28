@@ -37,6 +37,9 @@ public class User {
     @Column(name = "status", columnDefinition = "TINYINT DEFAULT 1")
     private boolean status;
 
+    @Column(name = "code", columnDefinition = "VARCHAR(10)")
+    private String code;
+
     @ManyToOne
     @JoinColumn(name = "role_id", columnDefinition = "BIGINT DEFAULT 2")
     private Role role = new Role(2);
@@ -158,6 +161,14 @@ public class User {
 
     public void setCourseUser(List<CourseUser> courseUser) {
         this.courseUser = courseUser;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
 }

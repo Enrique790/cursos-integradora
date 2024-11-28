@@ -60,6 +60,10 @@ public class UserService {
 
     @Transactional(rollbackFor = { SQLException.class })
     public ResponseEntity<ResponseObject> updateUser(UserDto userDto) {
+        if (userDto.getId() == 0) {
+            log.warn("User doesn't exist");
+            return new ResponseEntity<>(new ResponseObject("NO existe el usuario", Type.WARN), HttpStatus.NOT_FOUND);
+        }
         Optional<User> exist = userRepository.findById(userDto.getId());
         if (!exist.isPresent()) {
             log.warn("User doesn't exist");

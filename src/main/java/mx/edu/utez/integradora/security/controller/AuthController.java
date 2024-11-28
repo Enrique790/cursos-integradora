@@ -48,4 +48,10 @@ public class AuthController {
     public ResponseEntity<ResponseObject> loging(@RequestBody AuthRequest userLogin) throws Exception {
         return authService.login(userLogin);
     }
+
+    @PostMapping("/recovery")
+    public ResponseEntity<ResponseObject> passwordRecovery(@RequestBody AuthRequest authRequest) {
+        return authService.sendEmailPassword(authRequest);
+    }
+
 }
