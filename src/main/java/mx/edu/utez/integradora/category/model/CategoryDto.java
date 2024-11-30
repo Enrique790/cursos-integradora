@@ -49,4 +49,7 @@ public class CategoryDto {
 
     public interface ChangeStatus {
     }
+
+    public interface Delete {
+    }
 }

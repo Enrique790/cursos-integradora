@@ -97,4 +97,20 @@ public class CategoryService {
         }
         return new ResponseEntity<>(new ResponseObject("Se cambio el estado de la categoria con exito", Type.SUCCESS), HttpStatus.OK);
     }
+
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<Object> delete(Long id) {
+        Optional<Category> optionalCategory = repository.findById(id);
+        if(!optionalCategory.isPresent()) {
+            return new ResponseEntity<>(new ResponseObject("No se encontro esta categoria", Type.WARN), HttpStatus.NOT_FOUND);
+        }
+        try{
+            repository.deleteById(id);
+            return new ResponseEntity<>(new ResponseObject("Se ha eliminado la categoia correctacmente", Type.SUCCESS), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error al eliminar la categoria", e);
+            return new ResponseEntity<>(new ResponseObject("No se pudo eliinar la categoria", Type.ERROR), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

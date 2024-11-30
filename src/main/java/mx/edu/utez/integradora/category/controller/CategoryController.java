@@ -42,10 +42,14 @@ public class CategoryController {
         return categoryService.update(categoryDto);
     }
 
-    // @PutMapping
-    // public ResponseEntity<Object>
-    // changeStatus(@Validated({CategoryDto.Modify.class}) @RequestBody CategoryDto
-    // categoryDto) {
-    // return categoryService.changeStatus(categoryDto);
-    // }
+    @PutMapping("/change-status")
+    public ResponseEntity<Object>
+    changeStatus(@Validated({CategoryDto.ChangeStatus.class}) @RequestBody CategoryDto categoryDto) {
+        return categoryService.changeStatus(categoryDto);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
+        return categoryService.delete(id);
+    }
 }
