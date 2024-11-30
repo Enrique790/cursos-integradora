@@ -11,13 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.header.Header;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = { "http://localhost:*" }, methods = { RequestMethod.GET, RequestMethod.POST,
+        RequestMethod.PUT,
+        RequestMethod.DELETE, RequestMethod.PATCH })
 public class AuthController {
     private final AuthenticationManager authenticationManager;
 
@@ -45,7 +50,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseObject> loging(@RequestBody AuthRequest userLogin) throws Exception {
+    public ResponseEntity<ResponseObject> login(@RequestBody AuthRequest userLogin) throws Exception {
         return authService.login(userLogin);
     }
 
