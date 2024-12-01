@@ -42,7 +42,7 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "role_id", columnDefinition = "BIGINT DEFAULT 2")
-    private Role role = new Role(2);
+    private Role role = new Role(1);
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore

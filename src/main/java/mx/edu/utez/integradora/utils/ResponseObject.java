@@ -1,12 +1,18 @@
 package mx.edu.utez.integradora.utils;
 
 public class ResponseObject {
+
     private Object response;
     private Type typeResponse;
     private String message;
 
     public ResponseObject(Object response, Type typeResponse, String message) {
         this.response = response;
+        this.typeResponse = typeResponse;
+        this.message = message;
+    }
+
+    public ResponseObject(Type typeResponse, String message) {
         this.typeResponse = typeResponse;
         this.message = message;
     }

@@ -1,9 +1,14 @@
 package mx.edu.utez.integradora.category.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
+import mx.edu.utez.integradora.course.model.Course;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +20,15 @@ public class Category {
     @Column(name = "status", columnDefinition = "BOOL DEFAULT TRUE")
     private boolean status;
 
+    @OneToMany(mappedBy = "category")
+    @JsonIgnore
+    private List<Course> courses;
+
     public Category() {
+    }
+
+    public Category(Long id) {
+        this.id = id;
     }
 
     public Category(String name, String description) {

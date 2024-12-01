@@ -1,5 +1,6 @@
 package mx.edu.utez.integradora.security.service;
 
+import mx.edu.utez.integradora.role.model.Role;
 import mx.edu.utez.integradora.security.JwtUtil;
 import mx.edu.utez.integradora.security.UserDetailsServiceImpl;
 import mx.edu.utez.integradora.security.controller.AuthController;
@@ -14,7 +15,6 @@ import mx.edu.utez.integradora.utils.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
@@ -83,7 +83,7 @@ public class AuthService {
         final String jwt = jwtUtil.generateToken(userDetails);
         ResponseObject responseObject = new ResponseObject("AUTENTICADO", Type.SUCCESS);
         HttpHeaders headers = new HttpHeaders();
-
+        log.info(jwt);
         ResponseCookie cookie = ResponseCookie.from("access_token", jwt)
                 .httpOnly(true)
                 .secure(false)
@@ -139,7 +139,7 @@ public class AuthService {
             return new ResponseEntity<>(new ResponseObject("EL telefono ya existe", Type.WARN), HttpStatus.BAD_REQUEST);
         }
 
-        if (user.getLastname() == null || user.getLastname().length() > 0) {
+        if (user.getLastname() != null || user.getLastname().length() > 0) {
             log.info("SE creo el usuario con apellido");
             User newUser = new User(user.getName(), user.getLastname(), user.getEmail(),
                     encoder.encode(user.getPassword()), user.getPhone(), true);
@@ -147,7 +147,6 @@ public class AuthService {
             return new ResponseEntity<>(new ResponseObject(newUser, Type.SUCCESS, "Se creo exitosamente el usuario"),
                     HttpStatus.CREATED);
         }
-
         User newUser = new User(user.getName(), user.getEmail(), encoder.encode(user.getPassword()), user.getPhone(),
                 true);
         userRepository.saveAndFlush(newUser);
