@@ -41,14 +41,34 @@ public class CategoryService {
     @Transactional(rollbackFor = SQLException.class)
     public ResponseEntity<Object> save(CategoryDto dto) {
         dto.setName(dto.getName().toLowerCase());
+
         if(dto.getName().length() < 3) {
             return new ResponseEntity<>(new ResponseObject("El nombre de la categoria debe de tener mas de 3 caracteres",Type.WARN), HttpStatus.BAD_REQUEST);
         }
+        if (dto.getName().length() > 30) {
+            return new ResponseEntity<>(new ResponseObject("El nombre de la categoria debe de tener menos de 30 caracteres",Type.WARN), HttpStatus.BAD_REQUEST);
+        }
+
+        if(dto.getDescription().length() < 5) {
+            return new ResponseEntity<>(new ResponseObject("La descripccion de la categoria debe de tener mas de 5 caracteres",Type.WARN), HttpStatus.BAD_REQUEST);
+        }
+
+        if(dto.getDescription().length() > 100) {
+            return new ResponseEntity<>(new ResponseObject("La descripccion de la categoria no puede tener mas de 100 caracteres", Type.WARN), HttpStatus.BAD_REQUEST);
+        }
+
+
         Optional<Category> optionalCategory = repository.searchByNameAndId(dto.getName(), 0L);
         if(optionalCategory.isPresent()) {
             return new ResponseEntity<>(new ResponseObject("El nombre de la categoria ya existe", Type.WARN), HttpStatus.BAD_REQUEST);
         }
+
+
         Category category = new Category(dto.getName(), dto.getDescription(), true);
+
+
+
+
         category = repository.saveAndFlush(category);
         if (category == null) {
             log.error("Error al guardar la categoria");
@@ -63,6 +83,19 @@ public class CategoryService {
         if(dto.getName().length() < 3) {
             return new ResponseEntity<>(new ResponseObject("El nombre de la categoria debe de tener as de 3 caracteres",Type.WARN), HttpStatus.BAD_REQUEST);
         }
+
+        if(dto.getName().length() > 30) {
+            return new ResponseEntity<>(new ResponseObject("El nombre de la categoria debe de tener menos de 30 caracteres",Type.WARN), HttpStatus.BAD_REQUEST);
+        }
+
+        if(dto.getDescription().length() < 5) {
+            return new ResponseEntity<>(new ResponseObject("La descripccion de la categoria debe de tener mas de 5 caracteres",Type.WARN), HttpStatus.BAD_REQUEST);
+        }
+
+        if(dto.getDescription().length() > 100) {
+            return new ResponseEntity<>(new ResponseObject("La descripccion de la categoria no puede tener mas de 100 caracteres", Type.WARN), HttpStatus.BAD_REQUEST);
+        }
+
         Optional<Category> optional = repository.findById(dto.getId());
         if(!optional.isPresent()) {
             return new ResponseEntity<>(new ResponseObject("No se encontro esta categoria", Type.WARN), HttpStatus.NOT_FOUND);

@@ -37,6 +37,4 @@ out/
 .vscode/
 
 ### Logs file  ###
-servicio_test.log
-servicio_test.log.2024-11-20.0.gz
-servicio_test.log.2024-11-21.0.gz
+servicio_test.log*
