@@ -13,9 +13,9 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name", columnDefinition = "VARCHAR(40)")
+    @Column(name = "name", columnDefinition = "VARCHAR(40)", nullable = false)
     private String name;
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT", nullable = true)
     private String description;
     @Column(name = "status", columnDefinition = "BOOL DEFAULT TRUE")
     private boolean status;

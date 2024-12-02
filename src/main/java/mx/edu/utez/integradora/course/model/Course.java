@@ -1,17 +1,28 @@
 package mx.edu.utez.integradora.course.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import mx.edu.utez.integradora.category.model.Category;
+import mx.edu.utez.integradora.courseUser.model.CourseUser;
 
 @Entity
-@Table(name = "course")
+@Table(name = "course", indexes = {
+        @Index(name = "course_name", columnList = "name"),
+        @Index(name = "course_syllabus", columnList = "syllabus"),
+        @Index(name = "course_description", columnList = "description")
+})
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +46,10 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "id_category", columnDefinition = "BIGINT")
     private Category category;
+
+    @OneToMany(mappedBy = "course")
+    @JsonIgnore
+    private List<CourseUser> courseUsers;
 
     public Course(String name, String duration, String syllabus, String description) {
         this.name = name;
