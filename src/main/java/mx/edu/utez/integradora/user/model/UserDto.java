@@ -15,9 +15,9 @@ public class UserDto {
 
     private String lastname;
 
-    @Email(groups = { Modify.class, Create.class }, message = "Tiene que se un correo valido")
-    @NotBlank(groups = { Modify.class, Create.class }, message = "Tiene que tener un correo")
-    @NotNull(groups = { Modify.class, Create.class }, message = "Tiene que tener un correo")
+    @Email(groups = { Modify.class, Create.class, ChangePassword.class }, message = "Tiene que se un correo valido")
+    @NotBlank(groups = { Modify.class, Create.class, ChangePassword.class }, message = "Tiene que tener un correo")
+    @NotNull(groups = { Modify.class, Create.class, ChangePassword.class }, message = "Tiene que tener un correo")
     private String email;
 
     @NotNull(groups = { Modify.class, Create.class, ChangePassword.class }, message = "Tiene que tener contrasena")
@@ -31,6 +31,9 @@ public class UserDto {
     @NotNull(groups = { ChangeStatus.class }, message = "Tienes que mandar el status al cambiarlo")
     private boolean status;
 
+    @NotNull(groups = { VerifyCode.class }, message = "Se necesita el codigo")
+    private String code;
+
     public UserDto(long id, String name, String lastname, String email, String password, String phone, boolean status) {
         this.id = id;
         this.name = name;
@@ -39,6 +42,10 @@ public class UserDto {
         this.password = password;
         this.phone = phone;
         this.status = status;
+    }
+
+    public UserDto(@NotNull(groups = VerifyCode.class, message = "Se necesita el codigo") String code) {
+        this.code = code;
     }
 
     public UserDto(String name, String lastname, String email, String password, String phone, boolean status) {
@@ -128,15 +135,26 @@ public class UserDto {
         this.status = status;
     }
 
-    interface Modify {
+    public interface Modify {
     }
 
-    interface Create {
+    public interface Create {
     }
 
-    interface ChangeStatus {
+    public interface ChangeStatus {
     }
 
-    interface ChangePassword {
+    public interface ChangePassword {
+    }
+
+    public interface VerifyCode {
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

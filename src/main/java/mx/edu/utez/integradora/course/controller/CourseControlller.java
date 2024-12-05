@@ -3,12 +3,14 @@ package mx.edu.utez.integradora.course.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import mx.edu.utez.integradora.course.model.CourseDto;
 import mx.edu.utez.integradora.course.service.CourseService;
 import mx.edu.utez.integradora.utils.ResponseObject;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/course")
+@CrossOrigin(origins = { "http://localhost:*" }, methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+        RequestMethod.DELETE, RequestMethod.PATCH })
 public class CourseControlller {
 
     private CourseService courseService;

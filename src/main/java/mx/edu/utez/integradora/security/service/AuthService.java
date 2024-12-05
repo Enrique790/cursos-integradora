@@ -8,6 +8,7 @@ import mx.edu.utez.integradora.security.dto.AuthRequest;
 import mx.edu.utez.integradora.user.model.User;
 import mx.edu.utez.integradora.user.model.UserDto;
 import mx.edu.utez.integradora.user.model.UserRepository;
+import mx.edu.utez.integradora.user.model.UserDto.ChangePassword;
 import mx.edu.utez.integradora.utils.EmailSender;
 import mx.edu.utez.integradora.utils.ResponseObject;
 import mx.edu.utez.integradora.utils.Type;
@@ -29,6 +30,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.header.Header;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -236,7 +238,7 @@ public class AuthService {
                 + "      <span id=\"recoveryCode\">%RECOVERY_CODE%</span>\n"
                 + "    </div>\n"
                 + "\n"
-                + "    <p class=\"text-lg\">Para restablecer tu contraseña, ingresa este código en la página de recuperación de contraseña de la aplicación.</p>\n"
+                + "    <a href=\"http://localhost:5173/src/auth/contrasena.html?mail=%USER_MAIL%\" class=\"text-lg\">Click</a>\n"
                 + "\n"
                 + "    <p class=\"text-lg mt-6\">Si tienes alguna pregunta o necesitas asistencia, no dudes en contactarnos.</p>\n"
                 + "\n"
@@ -248,11 +250,67 @@ public class AuthService {
                 + "</html>";
         String personalizedHtml = htmlContent
                 .replace("%USER_NAME%", userToSendEmail.getName())
-                .replace("%RECOVERY_CODE%", userToSendEmail.getCode());
+                .replace("%RECOVERY_CODE%", userToSendEmail.getCode())
+                .replace("%USER_MAIL%", userToSendEmail.getEmail());
 
         emailSender.sendEmail(userToSendEmail.getEmail(), "Recuperacion de contrasena", personalizedHtml);
 
         return new ResponseEntity<>(new ResponseObject("Correo enviado", Type.SUCCESS), HttpStatus.OK);
 
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<ResponseObject> verifyCode(String verifyCode) {
+        Optional<User> exist = userRepository.findByCode(verifyCode);
+
+        if (!exist.isPresent()) {
+            return new ResponseEntity<>(new ResponseObject("NO existe el usuario con ese codigo", Type.WARN),
+                    HttpStatus.NOT_FOUND);
+        }
+
+        User user = new User();
+
+        user.setEmail(exist.get().getEmail());
+        user.setName(exist.get().getName());
+
+        return new ResponseEntity<>(new ResponseObject(user, Type.SUCCESS, "Usuario encontrado"), HttpStatus.OK);
+    }
+
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<ResponseObject> changePassword(@Validated(ChangePassword.class) UserDto password) {
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        if (password.getEmail() == null || password.getEmail().length() <= 0 || password.getEmail().length() > 50) {
+            log.warn("Correo no valido");
+            return new ResponseEntity<>(
+                    new ResponseObject("El correo no es valido no es valida", Type.WARN),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        if (password.getPassword() == null || password.getPassword().length() <= 0
+                || password.getPassword().length() > 100) {
+            log.warn("Contrasena no valido");
+            return new ResponseEntity<>(
+                    new ResponseObject("La constrasena no es valido no es valida", Type.WARN),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<User> exist = userRepository.findByMail(password.getEmail());
+
+        if (!exist.isPresent()) {
+            log.warn("No existe el correo");
+            return new ResponseEntity<>(
+                    new ResponseObject("Correo inexistente", Type.WARN),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        User newPassword = exist.get();
+
+        newPassword.setPassword(encoder.encode(password.getPassword()));
+
+        userRepository.save(newPassword);
+
+        return new ResponseEntity<>(new ResponseObject("Existo al cambiar la contra", Type.SUCCESS), HttpStatus.OK);
     }
 }
