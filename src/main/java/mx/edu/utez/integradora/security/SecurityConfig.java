@@ -28,7 +28,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/register", "/api/auth/login", "/api/user/all", "/api/category/all",
                                 "/api/auth/recovery", "/api/course/create", "/api/intersection/course/**",
-                                "/api/intersection/suscribe", "/api/auth/code/**")
+                                "/api/intersection/suscribe", "/api/auth/code/**", "/api/auth/password",
+                                "/api/course/limit")
                         .permitAll()
                         .requestMatchers("/api/category/save", "/api/category/update", "/api/course/specific",
                                 "/api/course/active", "/api/course/update", "/api/course/status")

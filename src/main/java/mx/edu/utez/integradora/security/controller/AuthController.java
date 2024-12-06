@@ -68,4 +68,10 @@ public class AuthController {
         return authService.verifyCode(code);
     }
 
+    @PostMapping("/password")
+    public ResponseEntity<ResponseObject> updatePassword(@RequestBody UserDto userDto) {
+
+        return authService.changePassword(userDto);
+    }
+
 }

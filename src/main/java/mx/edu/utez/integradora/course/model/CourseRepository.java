@@ -12,4 +12,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query(value = "SELECT * FROM course WHERE status = true", nativeQuery = true)
     List<Course> coursesWithStatusTrue();
 
+    @Query(value = "SELECT * FROM course ORDER BY rand() LIMIT 3", nativeQuery = true)
+    List<Course> courseLimit();
 }

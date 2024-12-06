@@ -141,7 +141,7 @@ public class CourseService {
 
     private String validateCourse(String name, String duration, String syllabus,
             String description) {
-        if (name == null || name.length() == 0 || name.length() > 40) {
+        if (name == null || name.length() == 0 || name.length() > 80) {
             log.warn("Debe tener nombre el curso");
             return "Se necesita un nombre o no puede se mayor de 40";
         }
@@ -157,12 +157,18 @@ public class CourseService {
             return "Se necesita un temario o no puede se mayor de 100 caracteres";
         }
 
-        if (description == null || description.length() == 0 || description.length() > 40) {
+        if (description == null || description.length() == 0 || description.length() > 100) {
             log.warn("Se necesita un descripcion o no puede se mayor de 40 caracteres");
             ;
             return "Se necesita un descripcion o no puede se mayor de 40 caracteres";
         }
         return "VALIDADO";
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<ResponseObject> getLimitCourse() {
+        return new ResponseEntity<>(new ResponseObject(courseRepository.courseLimit(), Type.SUCCESS, "Cursos"),
+                HttpStatus.OK);
     }
 
 }

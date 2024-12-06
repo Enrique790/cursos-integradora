@@ -20,15 +20,14 @@ import mx.edu.utez.integradora.courseUser.model.CourseUser;
 @Entity
 @Table(name = "course", indexes = {
         @Index(name = "course_name", columnList = "name"),
-        @Index(name = "course_syllabus", columnList = "syllabus"),
-        @Index(name = "course_description", columnList = "description")
+
 })
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name", nullable = false, columnDefinition = "VARCHAR(40)")
+    @Column(name = "name", nullable = false, columnDefinition = "VARCHAR(80)")
     private String name;
 
     @Column(name = "duration", nullable = false, columnDefinition = "VARCHAR(40)")
@@ -37,7 +36,7 @@ public class Course {
     @Column(name = "syllabus", columnDefinition = "TEXT")
     private String syllabus;
 
-    @Column(name = "description", columnDefinition = "VARCHAR(40)")
+    @Column(name = "description", columnDefinition = "VARCHAR(100)")
     private String description;
 
     @Column(name = "status", columnDefinition = "TINYINT DEFAULT 1")
