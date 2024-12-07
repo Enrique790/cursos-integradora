@@ -48,4 +48,14 @@ public class ResponseObject {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public Object getType() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getType'");
+    }
+
+    public Object getData() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getData'");
+    }
 }

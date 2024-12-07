@@ -97,4 +97,14 @@ public class CategoryService {
         }
         return new ResponseEntity<>(new ResponseObject("Se cambio el estado de la categoria con exito", Type.SUCCESS), HttpStatus.OK);
     }
+
+    public ResponseEntity<Object> delete(long existentCategoryId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    }
+
+    public Optional<Category> searchByNameAndId(String categoryName, long categoryId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'searchByNameAndId'");
+    }
 }

@@ -14,4 +14,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Query(value = "SELECT * FROM course ORDER BY rand() LIMIT 3", nativeQuery = true)
     List<Course> courseLimit();
+
+    Object searchByNameAndId(String any, Long any2);
+
+    Object findAllByStatusTrue();
 }

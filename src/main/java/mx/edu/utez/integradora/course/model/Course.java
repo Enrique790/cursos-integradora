@@ -57,7 +57,11 @@ public class Course {
         this.description = description;
     }
 
+    public Course(String string, String string2, String string3, String string4, boolean b) {
+    }
+
     public Course() {
+        //TODO Auto-generated constructor stub
     }
 
     public long getId() {

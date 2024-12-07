@@ -1,5 +1,9 @@
 package mx.edu.utez.integradora.category.model;
 
+import java.util.Optional;
+
+import org.springframework.http.ResponseEntity;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -13,7 +17,7 @@ public class CategoryDto {
     @NotBlank(groups = {Register.class, Modify.class}, message = "Es necesaria una descripccion")
     private String description;
 
-    public CategoryDto() {
+    public CategoryDto(String nombre, String descripcion) {
     }
 
     @NotNull(groups = {Modify.class}, message = "Es necesario un id")
@@ -48,5 +52,15 @@ public class CategoryDto {
     }
 
     public interface ChangeStatus {
+    }
+
+    public ResponseEntity<Object> save(CategoryDto categoryDto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'save'");
+    }
+
+    public Optional<Category> searchByNameAndId(String categoryName, long categoryId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'searchByNameAndId'");
     }
 }

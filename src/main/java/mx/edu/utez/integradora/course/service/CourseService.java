@@ -35,21 +35,21 @@ public class CourseService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<ResponseObject> allCourses() {
+    public ResponseEntity<Object> allCourses() {
         log.info("Todos los cursos ");
         return new ResponseEntity<>(new ResponseObject(courseRepository.findAll(), Type.SUCCESS, "Todos los cursos"),
                 HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<ResponseObject> statusTrue() {
+    public ResponseEntity<Object> statusTrue() {
         return new ResponseEntity<>(
                 new ResponseObject(courseRepository.coursesWithStatusTrue(), Type.SUCCESS, "Todos los cursos activos"),
                 HttpStatus.OK);
     }
 
     @Transactional(rollbackFor = { SQLException.class })
-    public ResponseEntity<ResponseObject> createNew(CourseDto newCourse) {
+    public ResponseEntity<Object> createNew(CourseDto newCourse) {
         var validate = validateCourse(newCourse.getName(), newCourse.getDuration(), newCourse.getSyllabus(),
                 newCourse.getDescription());
 
@@ -104,7 +104,7 @@ public class CourseService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<ResponseObject> specificCourse(Long id) {
+    public ResponseEntity<Object> specificCourse(Long id) {
         Optional<Course> exist = courseRepository.findById(id);
         if (!exist.isPresent()) {
             log.warn("NO existe el curso");
