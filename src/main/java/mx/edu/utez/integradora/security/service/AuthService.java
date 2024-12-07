@@ -85,7 +85,9 @@ public class AuthService {
         final String jwt = jwtUtil.generateToken(userDetails);
         ResponseObject responseObject = new ResponseObject("AUTENTICADO", Type.SUCCESS);
         HttpHeaders headers = new HttpHeaders();
-        log.info(jwt);
+
+        Optional<User> optionalDetail = userRepository.findByMail(auth.getEmail());
+
         ResponseCookie cookie = ResponseCookie.from("access_token", jwt)
                 .httpOnly(true)
                 .secure(false)
@@ -93,8 +95,16 @@ public class AuthService {
                 .sameSite("Lax")
                 .build();
 
-        headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
+        String idValues = String.valueOf(optionalDetail.get().getId());
+        ResponseCookie details = ResponseCookie.from("details", idValues)
+                .httpOnly(true)
+                .secure(false)
+                .maxAge(36000)
+                .sameSite("Lax")
+                .build();
 
+        headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
+        headers.add(HttpHeaders.SET_COOKIE, details.toString());
         headers.setBearerAuth(jwt);
         return ResponseEntity.ok().headers(headers).body(responseObject);
     }
