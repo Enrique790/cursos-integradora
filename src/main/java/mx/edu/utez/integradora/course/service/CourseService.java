@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mx.edu.utez.integradora.course.model.Course;
 import mx.edu.utez.integradora.course.model.CourseDto;
-import mx.edu.utez.integradora.category.*;
 import mx.edu.utez.integradora.category.model.Category;
 import mx.edu.utez.integradora.course.model.CourseRepository;
 import mx.edu.utez.integradora.utils.ResponseObject;
