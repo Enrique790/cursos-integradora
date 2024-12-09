@@ -34,30 +34,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        // final String authorizationHeader = request.getHeader("Authorization");
         final var tokenAuthorization = request.getCookies();
-
         String username = null;
         String jwt = null;
+
         if (tokenAuthorization != null) {
-            for (Cookie cookie : request.getCookies()) {
+            for (Cookie cookie : tokenAuthorization) {
                 if ("access_token".equals(cookie.getName())) {
+                    System.out.println(cookie);
                     jwt = cookie.getValue(); // Extrae el valor del token
                     break;
                 }
             }
         }
-        // if (authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
-        // {
-        // jwt = authorizationHeader.substring(7);
-        // try {
-        // username = jwtUtil.extractUsername(jwt);
-        // } catch (Exception e) {
-        // // Manejo de excepción si el token no es válido o está malformado
-        // logger.error("Error al extraer el nombre de usuario del token: " +
-        // e.getMessage());
-        // }
-        // }
 
         if (jwt != null) {
             try {
@@ -66,20 +55,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 logger.error("Error al extraer el nombre de usuario del token: " + e.getMessage());
             }
         }
-        // if (tokenAuthorization != null &&
-        // tokenAuthorization.startsWith("access_token:")) {
-        // jwt = tokenAuthorization.substring(13);
-        // try {
-        // username = jwtUtil.extractUsername(jwt);
-        // } catch (Exception e) {
-        // // Manejo de excepción si el token no es válido o está malformado
-        // logger.error("Error al extraer el nombre de usuario del token: " +
-        // e.getMessage());
-        // }
-        // }
 
-        // Validar el token y autenticar al usuario si el contexto de seguridad está
-        // vacío
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 

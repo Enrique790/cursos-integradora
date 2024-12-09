@@ -20,8 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/course")
-@CrossOrigin(origins = { "http://localhost:*" }, methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
-        RequestMethod.DELETE, RequestMethod.PATCH })
+@CrossOrigin(origins = { "http://localhost:5173" }, methods = { RequestMethod.GET, RequestMethod.POST,
+        RequestMethod.PUT,
+        RequestMethod.DELETE, RequestMethod.PATCH }, allowCredentials = "true")
 public class CourseControlller {
 
     private CourseService courseService;

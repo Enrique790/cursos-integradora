@@ -24,9 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = { "http://localhost:*" }, methods = { RequestMethod.GET, RequestMethod.POST,
+@CrossOrigin(origins = { "http://localhost:5173" }, methods = { RequestMethod.GET, RequestMethod.POST,
         RequestMethod.PUT,
-        RequestMethod.DELETE, RequestMethod.PATCH })
+        RequestMethod.DELETE,
+        RequestMethod.PATCH }, allowCredentials = "true", allowedHeaders = "*", exposedHeaders = "Set-Cookie")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
 

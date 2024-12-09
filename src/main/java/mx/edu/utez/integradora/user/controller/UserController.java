@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = { "http://localhost:*" }, methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
-        RequestMethod.DELETE, RequestMethod.PATCH })
+@CrossOrigin(origins = { "http://localhost:5173" }, methods = { RequestMethod.GET, RequestMethod.POST,
+        RequestMethod.PUT,
+        RequestMethod.DELETE, RequestMethod.PATCH }, allowCredentials = "true")
 public class UserController {
     private UserService userService;
 

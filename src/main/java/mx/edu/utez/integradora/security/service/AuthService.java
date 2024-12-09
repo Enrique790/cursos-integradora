@@ -83,29 +83,30 @@ public class AuthService {
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(auth.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
-        ResponseObject responseObject = new ResponseObject("AUTENTICADO", Type.SUCCESS);
         HttpHeaders headers = new HttpHeaders();
 
         Optional<User> optionalDetail = userRepository.findByMail(auth.getEmail());
+        ResponseObject responseObject = new ResponseObject(optionalDetail.get().getId(), Type.SUCCESS, "AUTENTICADO");
 
         ResponseCookie cookie = ResponseCookie.from("access_token", jwt)
                 .httpOnly(true)
                 .secure(false)
                 .maxAge(3600)
-                .sameSite("Lax")
+                .sameSite("LAX")
+                .path("/")
                 .build();
 
-        String idValues = String.valueOf(optionalDetail.get().getId());
-        ResponseCookie details = ResponseCookie.from("details", idValues)
-                .httpOnly(true)
-                .secure(false)
-                .maxAge(36000)
-                .sameSite("Lax")
-                .build();
+        // ResponseCookie details = ResponseCookie.from("details", idValues)
+        // .httpOnly(false)
+        // .secure(false)
+        // .maxAge(36000)
+        // .sameSite("Lax")
+        // .path("/api/**")
+        // .build();
 
         headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
-        headers.add(HttpHeaders.SET_COOKIE, details.toString());
-        headers.setBearerAuth(jwt);
+        // headers.add(HttpHeaders.SET_COOKIE, details.toString());
+        // headers.setBearerAuth(jwt);
         return ResponseEntity.ok().headers(headers).body(responseObject);
     }
 

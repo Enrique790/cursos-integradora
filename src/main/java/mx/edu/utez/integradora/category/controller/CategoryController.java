@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/category")
-@CrossOrigin(origins = { "http://localhost:*" }, methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
-        RequestMethod.DELETE })
+@CrossOrigin(origins = { "http://localhost:5173" }, methods = { RequestMethod.GET, RequestMethod.POST,
+        RequestMethod.PUT,
+        RequestMethod.DELETE }, allowCredentials = "true")
 public class CategoryController {
     private final CategoryService categoryService;
 

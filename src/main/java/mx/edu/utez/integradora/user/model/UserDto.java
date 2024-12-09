@@ -7,7 +7,8 @@ import org.springframework.validation.annotation.Validated;
 
 public class UserDto {
 
-    @NotNull(groups = { Modify.class, ChangeStatus.class }, message = "Es necesario el id para alguna modificacion")
+    @NotNull(groups = { Modify.class, ChangeStatus.class,
+            OneUser.class }, message = "Es necesario el id para alguna modificacion")
     private long id;
     @NotNull(groups = { Modify.class, Create.class }, message = "El usuario necesita un nombre")
     @NotBlank(groups = { Modify.class, Create.class }, message = "Es necesario el nombre")
@@ -148,6 +149,9 @@ public class UserDto {
     }
 
     public interface VerifyCode {
+    }
+
+    public interface OneUser {
     }
 
     public String getCode() {

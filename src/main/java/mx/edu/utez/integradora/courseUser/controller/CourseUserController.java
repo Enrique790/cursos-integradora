@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequestMapping("/api/intersection")
-@CrossOrigin(origins = { "http://localhost:*" }, methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
-        RequestMethod.DELETE, RequestMethod.PATCH })
+@CrossOrigin(origins = { "http://localhost:5173" }, methods = { RequestMethod.GET, RequestMethod.POST,
+        RequestMethod.PUT,
+        RequestMethod.DELETE, RequestMethod.PATCH }, allowCredentials = "true", allowedHeaders = "*")
 public class CourseUserController {
     private CourseUserService courseUserService;
 
