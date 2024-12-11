@@ -32,7 +32,7 @@ public class SecurityConfig {
                                 "/api/auth/recovery", "/api/course/create", "/api/auth/code/**", "/api/auth/password",
                                 "/api/course/limit", "/api/course/specific/**")
                         .permitAll()
-                        .requestMatchers("/api/intersection/suscribe")
+                        .requestMatchers("/api/intersection/suscribe", "/api/user/info/**")
                         .hasAnyAuthority("STUDENT")
                         .requestMatchers("/api/category/save", "/api/category/update",
                                 "/api/course/active", "/api/course/update", "/api/course/status")

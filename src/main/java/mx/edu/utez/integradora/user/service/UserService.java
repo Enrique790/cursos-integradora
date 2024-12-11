@@ -5,6 +5,7 @@ import mx.edu.utez.integradora.user.model.UserDto;
 import mx.edu.utez.integradora.user.model.UserRepository;
 import mx.edu.utez.integradora.utils.ResponseObject;
 import mx.edu.utez.integradora.utils.Type;
+import okhttp3.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,5 +115,28 @@ public class UserService {
         log.info("User update without lastname");
 
         return new ResponseEntity<>(new ResponseObject("Se actualizo el usuario", Type.SUCCESS), HttpStatus.OK);
+    }
+
+    @Transactional(rollbackFor = { SQLException.class })
+    public ResponseEntity<ResponseObject> getInfo(Long id) {
+        if (id == 0) {
+            return new ResponseEntity<>(new ResponseObject("Ingresa un id valido", Type.ERROR), HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<User> exist = userRepository.findById(id);
+
+        if (exist.isEmpty()) {
+            return new ResponseEntity<>(new ResponseObject("No existe el usario", Type.ERROR), HttpStatus.NOT_FOUND);
+        }
+
+        UserDto info = new UserDto();
+
+        info.setName(exist.get().getName());
+        info.setEmail(exist.get().getEmail());
+        info.setLastname((exist.get().getLastname() == null || exist.get().getLastname().isEmpty()) ? " "
+                : exist.get().getLastname());
+        info.setPhone(exist.get().getPhone());
+
+        return new ResponseEntity<>(new ResponseObject(info, Type.SUCCESS, "Info"), HttpStatus.OK);
     }
 }

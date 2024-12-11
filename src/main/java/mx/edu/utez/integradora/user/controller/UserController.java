@@ -6,6 +6,8 @@ import mx.edu.utez.integradora.utils.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/user")
@@ -34,4 +36,10 @@ public class UserController {
     public ResponseEntity<ResponseObject> updateProfile(@RequestBody UserDto userUpdateProfile) {
         return userService.updateUser(userUpdateProfile);
     }
+
+    @GetMapping("/info/{id}")
+    public ResponseEntity<ResponseObject> getInfo(@PathVariable("id") Long id) {
+        return userService.getInfo(id);
+    }
+
 }
