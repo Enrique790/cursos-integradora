@@ -59,6 +59,11 @@ public class AuthController {
         return authService.login(userLogin);
     }
 
+    @PostMapping("/admin")
+    public ResponseEntity<ResponseObject> loginAdmin(@RequestBody AuthRequest admin) throws Exception {
+        return authService.loginAdmin(admin);
+    }
+
     @PostMapping("/recovery")
     public ResponseEntity<ResponseObject> passwordRecovery(@RequestBody AuthRequest authRequest) {
         return authService.sendEmailPassword(authRequest);

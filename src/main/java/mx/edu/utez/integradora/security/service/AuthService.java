@@ -81,11 +81,69 @@ public class AuthService {
         } catch (BadCredentialsException e) {
             throw new Exception("Usuario o contraseña incorrectos", e);
         }
+        Optional<User> optionalDetail = userRepository.findByMail(auth.getEmail());
+        if (optionalDetail.get().getRole().getId() == 1) {
+            log.warn("Un admin trato de iniciar sesion en el login equivodado");
+            return new ResponseEntity<>(new ResponseObject("Por favor inicia sesion en donde se debe", Type.WARN),
+                    HttpStatus.BAD_REQUEST);
+        }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(auth.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
         HttpHeaders headers = new HttpHeaders();
 
+        ResponseObject responseObject = new ResponseObject(optionalDetail.get().getId(), Type.SUCCESS, "AUTENTICADO");
+
+        ResponseCookie cookie = ResponseCookie.from("access_token", jwt)
+                .httpOnly(true)
+                .secure(false)
+                .maxAge(3600)
+                .sameSite("LAX")
+                .path("/")
+                .build();
+
+        // ResponseCookie details = ResponseCookie.from("details", idValues)
+        // .httpOnly(false)
+        // .secure(false)
+        // .maxAge(36000)
+        // .sameSite("Lax")
+        // .path("/api/**")
+        // .build();
+
+        headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
+        // headers.add(HttpHeaders.SET_COOKIE, details.toString());
+        // headers.setBearerAuth(jwt);
+        return ResponseEntity.ok().headers(headers).body(responseObject);
+    }
+
+    @Transactional(rollbackFor = { SQLException.class })
+    public ResponseEntity<ResponseObject> loginAdmin(AuthRequest auth) throws Exception {
+        if (auth.getEmail().length() <= 0) {
+            log.warn("El correo de inicio no cumple el contrato");
+            return new ResponseEntity<>(new ResponseObject("Tiene que tener correo para pasar", Type.WARN),
+                    HttpStatus.BAD_REQUEST);
+        }
+        if (auth.getPassword().length() <= 0) {
+            log.warn("No se cumple con la contrasena requerida");
+            return new ResponseEntity<>(new ResponseObject("Tiene que tener password para pasar", Type.WARN),
+                    HttpStatus.BAD_REQUEST);
+        }
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(auth.getEmail(), auth.getPassword()));
+
+        } catch (BadCredentialsException e) {
+            throw new Exception("Usuario o contraseña incorrectos", e);
+        }
         Optional<User> optionalDetail = userRepository.findByMail(auth.getEmail());
+        if (optionalDetail.get().getRole().getId() == 2) {
+            log.warn("Este usuario trato de iniciar sesion sin ser admin" + optionalDetail.get().getEmail());
+            return new ResponseEntity<>(new ResponseObject("No eres el admin", Type.FATAL), HttpStatus.UNAUTHORIZED);
+        }
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(auth.getEmail());
+        final String jwt = jwtUtil.generateToken(userDetails);
+        HttpHeaders headers = new HttpHeaders();
+
         ResponseObject responseObject = new ResponseObject(optionalDetail.get().getId(), Type.SUCCESS, "AUTENTICADO");
 
         ResponseCookie cookie = ResponseCookie.from("access_token", jwt)

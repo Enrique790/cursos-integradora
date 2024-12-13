@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/register", "/api/auth/login", "/api/user/all", "/api/category/all",
                                 "/api/auth/recovery", "/api/course/create", "/api/auth/code/**", "/api/auth/password",
-                                "/api/course/limit", "/api/course/specific/**")
+                                "/api/course/limit", "/api/course/specific/**", "/api/auth/admin")
                         .permitAll()
                         .requestMatchers("/api/intersection/suscribe", "/api/user/info/**")
                         .hasAnyAuthority("STUDENT")
